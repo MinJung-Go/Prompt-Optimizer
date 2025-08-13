@@ -12,7 +12,7 @@
 
 - **🔧 智能优化**：基于AI的提示词优化，提升提示效果
 - **🎨 智能生成**：使用COAST框架从需求生成高质量提示词
-- **🤖 多模型支持**：GPT-4.1、GPT-4o、GPT-3.5-turbo等OpenAI模型
+- **🤖 多模型支持**：GPT-4.1、GPT-4o等OpenAI模型
 - **📋 任务类型**：通用、创意、技术、分析、教育等多种场景
 - **💾 导出功能**：支持Markdown格式下载优化后的提示词
 - **🎨 现代UI**：基于Material-UI的响应式设计
@@ -155,7 +155,7 @@ prompt-optimizer/
 ## 📞 支持与联系
 
 - 🐛 **问题反馈**：[GitHub Issues](https://github.com/MinJung-Go/Prompt-Optimizer/issues)
-- 💡 **功能建议**：[GitHub Discussions](https://github.com/MinJung-Go/Prompt-Optimizer/discussions)
+- 💡 **功能建议**：[GitHub Discussions](https://github.com/MinJung-Go/Prompt-Optimizer/issues)
 
 ## TODO
 - [ ] 添加更多模型支持，增加DeepSeek-R1类推理模型
