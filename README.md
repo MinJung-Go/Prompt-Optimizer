@@ -154,9 +154,8 @@ prompt-optimizer/
 
 ## 📞 支持与联系
 
-- 🐛 **问题反馈**：[GitHub Issues](https://github.com/your-username/prompt-optimizer/issues)
-- 💡 **功能建议**：[GitHub Discussions](https://github.com/your-username/prompt-optimizer/discussions)
-- 📧 **联系邮箱**：your.email@example.com
+- 🐛 **问题反馈**：[GitHub Issues](https://github.com/MinJung-Go/Prompt-Optimizer/issues)
+- 💡 **功能建议**：[GitHub Discussions](https://github.com/MinJung-Go/Prompt-Optimizer/discussions)
 
 ## TODO
 - [ ] 添加更多模型支持，增加DeepSeek-R1类推理模型
