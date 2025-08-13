@@ -16,9 +16,10 @@ class OpenAIService:
     def get_client(self, api_key: Optional[str] = None, base_url: Optional[str] = None):
         """Get OpenAI client with optional custom API key and base URL"""
         return openai.OpenAI(
-                api_key=api_key or self.default_api_key,
-                base_url=base_url or self.default_base_url
-            )
+                    api_key=api_key or self.default_api_key,
+                    base_url=base_url or self.default_base_url,
+                    http_client=httpx.Client(proxy="http://192.168.28.46:8118")
+                )
         
     async def optimize_prompt(self, request: PromptRequest) -> PromptResponse:
         """

@@ -138,7 +138,7 @@ class ApiService {
     suggestions: string[];
   }> {
     try {
-      const response = await this.api.post('/validate?prompt='+prompt);
+      const response = await this.api.post('/validate', { prompt });
       return response.data;
     } catch (error: any) {
       if (error.code === 'ECONNABORTED') {

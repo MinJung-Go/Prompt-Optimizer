@@ -76,12 +76,29 @@ const PromptInput: React.FC<PromptInputProps> = ({ onOptimize, loading }) => {
   };
 
   const validatePrompt = async () => {
-    if (!prompt.trim()) {
+    // Combine prompt and context for validation to handle "## Context:" cases
+    const combinedPrompt = prompt.trim();
+    if (!combinedPrompt) {
       setPromptError('Please enter a prompt to optimize');
       return false;
     }
+    
+    // Basic client-side validation to avoid API issues with special characters
+    if (combinedPrompt.length < 3) {
+      setPromptError('Prompt is too short');
+      return false;
+    }
+    if (combinedPrompt.length > 4000) {
+      setPromptError('Prompt is too long');
+      return false;
+    }
+    if (!/[a-zA-Z0-9]/.test(combinedPrompt)) {
+      setPromptError('Prompt contains no alphanumeric characters');
+      return false;
+    }
+    
     try {
-      const validation = await apiService.validatePrompt(prompt);
+      const validation = await apiService.validatePrompt(combinedPrompt);
       if (!validation.is_valid) {
         setPromptError(validation.issues.join(', '));
         return false;
@@ -90,7 +107,9 @@ const PromptInput: React.FC<PromptInputProps> = ({ onOptimize, loading }) => {
       return true;
     } catch (error) {
       console.error('Validation error:', error);
-      return true; // Allow optimization even if validation fails
+      // Allow optimization even if validation fails, but don't show error to user
+      setPromptError('');
+      return true;
     }
   };
 
