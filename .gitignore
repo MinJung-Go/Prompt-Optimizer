@@ -1,0 +1,208 @@
+# =============================================================================
+# AI Prompt Optimizer - Git忽略规则
+# 确保敏感信息和临时文件不会提交到版本控制
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# 敏感信息
+# -----------------------------------------------------------------------------
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# -----------------------------------------------------------------------------
+# 依赖和构建产物
+# -----------------------------------------------------------------------------
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 构建产物
+build/
+dist/
+*.tgz
+*.tar.gz
+
+# -----------------------------------------------------------------------------
+# IDE和编辑器
+# -----------------------------------------------------------------------------
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# -----------------------------------------------------------------------------
+# 操作系统
+# -----------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# -----------------------------------------------------------------------------
+# 日志和数据库
+# -----------------------------------------------------------------------------
+*.log
+*.sql
+*.sqlite
+*.db
+logs/
+temp/
+tmp/
+
+# -----------------------------------------------------------------------------
+# Docker
+# -----------------------------------------------------------------------------
+.dockerignore
+docker-compose.override.yml
+
+# -----------------------------------------------------------------------------
+# 测试和覆盖率
+# -----------------------------------------------------------------------------
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# -----------------------------------------------------------------------------
+# 缓存和临时文件
+# -----------------------------------------------------------------------------
+.cache/
+.parcel-cache/
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# -----------------------------------------------------------------------------
+# 证书和密钥
+# -----------------------------------------------------------------------------
+*.pem
+*.key
+*.crt
+*.cert
+*.p12
+*.pfx
+
+# -----------------------------------------------------------------------------
+# 备份文件
+# -----------------------------------------------------------------------------
+*.backup
+*.bak
+*.orig
+*.rej
+
+# -----------------------------------------------------------------------------
+# 项目特定
+# -----------------------------------------------------------------------------
+backend/__pycache__/
+backend/.env
+backend/venv/
+backend/logs/
+
+frontend/node_modules/
+frontend/.env
+frontend/build/
+frontend/coverage/
+
+# 虚拟环境
+venv/
+env/
+.venv/
+.env/

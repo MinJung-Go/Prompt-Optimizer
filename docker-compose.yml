@@ -1,0 +1,164 @@
+# =============================================================================
+# AI Prompt Optimizer - Docker Compose 配置
+# 适用于开发、测试和生产环境
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------------------------
+  # 后端服务 (FastAPI)
+  # ---------------------------------------------------------------------------
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        - BACKEND_IMAGE_TAG=${BACKEND_IMAGE_TAG:-latest}
+    container_name: ${COMPOSE_PROJECT_NAME:-prompt-optimizer}-backend
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      - HOST=${BACKEND_HOST:-0.0.0.0}
+      - PORT=8000
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - REQUEST_TIMEOUT=${REQUEST_TIMEOUT:-30}
+      - MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-10}
+      - CACHE_TTL=${CACHE_TTL:-3600}
+      - ENABLE_CORS=${ENABLE_CORS:-true}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:80}
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app
+      - backend_logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ---------------------------------------------------------------------------
+  # 前端服务 (React + Nginx)
+  # ---------------------------------------------------------------------------
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:8000/api/v1}
+        - REACT_APP_NAME=${REACT_APP_NAME:-AI Prompt Optimizer}
+        - REACT_APP_ENV=${REACT_APP_ENV:-development}
+    container_name: ${COMPOSE_PROJECT_NAME:-prompt-optimizer}-frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      - REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:8000/api/v1}
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ---------------------------------------------------------------------------
+  # Redis (可选，用于缓存和会话)
+  # ---------------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: ${COMPOSE_PROJECT_NAME:-prompt-optimizer}-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ---------------------------------------------------------------------------
+  # 反向代理 (可选，用于生产环境)
+  # ---------------------------------------------------------------------------
+  # nginx-proxy:
+  #   image: nginx:alpine
+  #   container_name: ${COMPOSE_PROJECT_NAME:-prompt-optimizer}-nginx
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./nginx/ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - frontend
+  #     - backend
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+
+  # ---------------------------------------------------------------------------
+  # Traefik (可选，用于生产环境的反向代理)
+  # ---------------------------------------------------------------------------
+  # traefik:
+  #   image: traefik:v3.0
+  #   container_name: ${COMPOSE_PROJECT_NAME:-prompt-optimizer}-traefik
+  #   command:
+  #     - "--api.insecure=true"
+  #     - "--providers.docker=true"
+  #     - "--providers.docker.exposedbydefault=false"
+  #     - "--entrypoints.web.address=:80"
+  #     - "--entrypoints.websecure.address=:443"
+  #     - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+  #     - "--certificatesresolvers.letsencrypt.acme.email=your-email@example.com"
+  #     - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #     - "8080:8080"
+  #   volumes:
+  #     - /var/run/docker.sock:/var/run/docker.sock:ro
+  #     - ./traefik/letsencrypt:/letsencrypt
+  #   restart: unless-stopped
+  #   networks:
+  #     - app-network
+
+# =============================================================================
+# 网络和存储配置
+# =============================================================================
+
+networks:
+  app-network:
+    name: ${COMPOSE_PROJECT_NAME:-prompt-optimizer}-network
+    driver: bridge
+
+volumes:
+  backend_logs:
+    driver: local
+  redis_data:
+    driver: local
