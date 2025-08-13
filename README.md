@@ -34,7 +34,7 @@
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-username/prompt-optimizer.git
+git clone https://github.com/MinJung-Go/Prompt-Optimizer.git
 cd prompt-optimizer
 
 # 配置环境变量
